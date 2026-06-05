@@ -1,1 +1,4 @@
 test
+src/logs
+src/data-collection/__pycache__
+src/data-collection/test.py
