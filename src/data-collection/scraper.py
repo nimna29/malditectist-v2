@@ -57,7 +57,7 @@ def selected_already(filename: str) -> bool:
 def fetch_batch(start: int) -> tuple[list[dict], int]:
     """
     API Endpoint: GET https://search.maven.org/solrsearch/select
-    Params: q=*&rows=200&start={offset}&wt=json
+    Params: q=p:jar&rows=200&start={offset}&wt=json
     API Docs: https://central.sonatype.org/search/rest-api-guide
     """
     
@@ -135,7 +135,7 @@ def process_file(jar_path: str, filename: str) -> str:
     selected_folder = FOLDERS["selected"]
     selected_path = os.path.join(selected_folder, filename)
     
-    if os.path.exists(selected_folder):
+    if os.path.exists(selected_path):
         log.info(f" Duplicate file in selected - Removing....")
         os.remove(jar_path)
     else:
@@ -201,7 +201,7 @@ def run_process():
                 # Skip if the file already processed in a previous session
                 if selected_already(filename):
                     log.debug(f" Skipped (already processed): {label}")
-                    session_failed += 1
+                    session_skipped += 1
                     continue
                 
                 log.info(f" {label} v{version}")
