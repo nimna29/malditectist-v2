@@ -5,9 +5,11 @@ import time
 import json
 import requests
 from bs4 import BeautifulSoup
+import re
 
 from logger import get_logger
 from manifest_checker import check_manifest
+from get_latest import compare_version
 
 log = get_logger("scraper")
 
@@ -141,6 +143,60 @@ def process_file(jar_path: str, filename: str) -> str:
     
     return "selected"
 
+# Function to parse subdirectory into base name and version string
+def parse_subdir_variants(name: str):
+    match = re.match(r'^(.+?)([_\-])(\d[\d.]*)$', name.rstrip("/"))
+    if match:
+        base, sep, version = match.groups()
+        return base, sep, version
+    
+    return None
+
+# Function to group and get the latest sub directory
+def filter_latest_subdirs(subdirs: list[str]) -> list[str]:
+    groups = {} # (base, sep) into [(version_str, original_subdir)]
+    ungrouped = [] # subdirs without version string
+    
+    # Loop the subdirs and group them by base name and separator
+    for subdir in subdirs:
+        parsed = parse_subdir_variants(subdir)
+        
+        # If the subdir has a version string group it using base name and separator
+        if parsed:
+            base, sep, version = parsed
+            key = (base, sep)
+            if key not in groups:
+                groups[key] = []
+            groups[key].append((version, subdir))
+            
+        else:
+            ungrouped.append(subdir)
+    
+    result = list(ungrouped)
+    
+    # Loop the groups and keep only the highest version subdir
+    for (base, sep), variants in groups.items():
+        # If there is only one variant keep it as it is
+        if len(variants) == 1:
+            result.append(variants[0][1])
+            
+        else:
+            # Sort the variants by version string and keep only the highest version
+            try:
+                variants.sort(key=lambda x: compare_version(x[0]), reverse=True)
+            except Exception:
+                pass # If sort fails keep original order
+            
+            # Keep the highest version and log the skipped variants
+            highest = variants[0][1]
+            skipped = len(variants) - 1 # Number of skipped variants
+            
+            log.debug(f" Variant filter (keeping): {highest.rstrip('/')} | Skipped {skipped} older variants")
+            result.append(highest)
+
+    return result
+
+
 # Main function to run process
 def run_process():
     # Create folders if they don't exist
@@ -237,7 +293,11 @@ def run_process():
             # If it's not a version folder
             # Add the subdirs into the queue for more processing
             else:
-                for subdir in subdirs:
+                # Filter the subdirs to keep only the latest version variants
+                filtered_subdirs = filter_latest_subdirs(subdirs)
+                
+                # Add the filtered subdirs into the queue for more processing
+                for subdir in filtered_subdirs:
                     full_path = f"{current_path}{subdir}" if current_path else subdir
                     if full_path not in visited:
                         queue.append(full_path)
