@@ -145,7 +145,7 @@ def process_file(jar_path: str, filename: str) -> str:
 
 # Function to parse subdirectory into base name and version string
 def parse_subdir_variants(name: str):
-    match = re.match(r'^(.+?)([_\-])(\d[\d.]*)$', name.rstrip("/"))
+    match = re.match(r'^(.+?)([_\-])(\d[\d.]*(?:[.\-][A-Za-z0-9]+)*)$', name.rstrip("/"))
     if match:
         base, sep, version = match.groups()
         return base, sep, version
