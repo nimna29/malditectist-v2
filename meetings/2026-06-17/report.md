@@ -21,9 +21,11 @@
 
 - Talk about the progress
 - And confirm I am going in the right direction.
+- Real malware often runs on its own without needing any user interaction. It basically executes its harmful actions automatic. So, tools that rely on user input may not perfectly represent how malware behaves. So I don't have to do a huge user interaction with Java programs.
 
 ---
 
 Items discussed with supervisor: (After the meeting)
 
--
+- Java orchestrator - which will take Java byte codes and do the same program process
+- Lit review - more focus on the methods and techniques you are currently working on and using to develop this project. Because when creating the final version of the document, you might have to remove irrelevant content.
