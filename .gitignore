@@ -1,6 +1,6 @@
 test
 src/logs
-src/data-collection/__pycache__
-src/data-collection/test.py
-src/data-collection/JavaFiles
-src/data-collection/progress.json
+src/data_collection/__pycache__
+src/data_collection/test.py
+src/data_collection/JavaFiles
+src/data_collection/progress.json
