@@ -1,0 +1,5 @@
+# This is for Pintool Makefile Rules
+# Tell the tools to build using PIN's build system
+# This file is access by the PIN build framework
+
+TOOL_ROOTS := opcode_tracer
