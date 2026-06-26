@@ -8,6 +8,7 @@ import os
 import json
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 # Add the parent directory to the sys.path to import the logger module
@@ -24,8 +25,11 @@ DOCKER_IMAGE = "malditectist-tracer"
 PROGRESS_FILE = os.path.join("tracer_progress.json")
 
 # PIN trace related settings
-MAX_OPCODES = 1_000_000 # 1 million opcodes per jar file
-TRACE_TIMEOUT = 90 # seconds before Docker kills the it's container
+MAX_OPCODES = 0 # 0 = unlimited opcodes
+TRACE_TIMEOUT = 3600 # 1 hour max run time to each jar file - outer Python timeout
+INNER_TIMEOUT = 3600 # Always need to match with the TRACE_TIMEOUT - pass to run_trace
+# Storage safety value - run_trace kills the PIN if the output exceeds 512MB
+MAX_TRACE_SIZE_MB = 1024
 
 # Dokcer resource related settings
 MEMORY_LIMIT = "1g" # 1GB RAM per container
@@ -92,10 +96,11 @@ def trace_jar(jar_path: str, output_path: str, input_file: str = None) -> bool:
         "/trace/target.jar",
         f"/trace/output/{output_filename}",
         str(MAX_OPCODES),
-        "60",
+        str(INNER_TIMEOUT),
+        str(MAX_TRACE_SIZE_MB),
     ]
     
-    # If an input file is given it will mount and append as 5th arg
+    # If an input file is given it will mount and append as 6th arg
     if input_file and os.path.exists(input_file):
         input_abs = os.path.abspath(input_file)
         cmd += ["-v", f"{input_abs}:/trace/input.txt:ro"]
@@ -106,9 +111,11 @@ def trace_jar(jar_path: str, output_path: str, input_file: str = None) -> bool:
 
     try:
         # Run the Docker container with a timeout and capture the output data
+        # File size safety is handled by the run_trace file
+        # This is a simple blocking subprocess.run call
         result = subprocess.run(
             cmd,
-            timeout = TRACE_TIMEOUT,
+            timeout = TRACE_TIMEOUT + 60, # add a small buffer over inner timeout
             capture_output = True,
             text = True
         )
@@ -187,8 +194,9 @@ def run_process():
     log.info(f"Input: {INPUT_DIR}/")
     log.info(f"Output: {OUTPUT_DIR}/")
     log.info(f"Total Files: {len(all_jars)}")
-    log.info(f"Max Opcodes: {MAX_OPCODES:,} per file")
-    log.info(f"Timeout: {TRACE_TIMEOUT}s per file")
+    log.info(f"Max Opcodes: Unlimited (runs until natural exit)")
+    log.info(f"Safety Timeout: {TRACE_TIMEOUT}s ({TRACE_TIMEOUT//60} Min) per file")
+    log.info(f"Max Trace File Size: {MAX_TRACE_SIZE_MB} MB per file")
     log.info(f"Docker Image: {DOCKER_IMAGE}")
     log.info("Press Ctrl+C to stop and the progress will be saved")
     log.info("#" * 50)

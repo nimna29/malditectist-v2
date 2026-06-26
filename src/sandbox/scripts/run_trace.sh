@@ -7,18 +7,20 @@
 # Args used in this Script
 # $1 - path to the jar file inside the container
 # $2 - path to the output trace file inside the container
-# $3 - max opcodes to capture and saved (default set to 1000000 - 1M)
-# $4 - execution timeout in seconds (default set to 60)
-# $5 - optional path to an input file which use for program's stdin
+# $3 - max opcodes to capture and saved (0 = unlimited)
+# $4 - execution timeout in seconds (default set to 3600 - 1 hour)
+# $5 - max output file size in MB (default set to 1024 MB)
+# $6 - optional path to an input file which use for program's stdin
 # Which is used for interactive CLI programs that need some inputs to start
 
 
 # Argument set
 JAR_FILE=${1}
 OUTPUT_FILE=${2}
-MAX_OPCODES=${3:-1000000}
-TIMEOUT_SEC=${4:-60}
-INPUT_FILE=${5:-}
+MAX_OPCODES=${3:-0}
+TIMEOUT_SEC=${4:-3600}
+MAX_SIZE_MB=${5:-1024}
+INPUT_FILE=${6:-}
 
 PIN=/pin/pin
 PINTOOL=/pintool/opcode_tracer.so
@@ -27,7 +29,7 @@ PINTOOL=/pintool/opcode_tracer.so
 # Input Validation
 if [ -z "$JAR_FILE" ] || [ -z "$OUTPUT_FILE" ]; then
     echo "[run_trace] ERROR: JAR_FILE and OUTPUT_FILE arguments are required"
-    echo "Usage: run_trace.sh <jar_file> <output_file> [max_opcodes] [timeout] [input_file]"
+    echo "Usage: run_trace.sh <jar_file> <output_file> [max_opcodes] [timeout] [max_size_mb] [input_file]"
     exit 1
 fi
 
@@ -51,8 +53,9 @@ sleep 0.5
 
 echo "[run_trace] JAR: $JAR_FILE"
 echo "[run_trace] Output: $OUTPUT_FILE"
-echo "[run_trace] Max opcodes: $MAX_OPCODES"
+echo "[run_trace] Max Opcodes: $MAX_OPCODES"
 echo "[run_trace] Timeout: ${TIMEOUT_SEC}s"
+echo "[run_trace] Max Size: ${MAX_SIZE_MB}MB"
 
 
 # Identify stdin source
@@ -65,7 +68,7 @@ else
 fi
 
 
-# Run Intel PIN with JVM
+# Run Intel PIN with JVM - started in background to watch the output file
 # PIN Flags
 # -t path to the pintool
 # -o output file for opcode 
@@ -88,10 +91,29 @@ timeout "$TIMEOUT_SEC" "$PIN" \
     -XX:+TieredCompilation \
     -jar "$JAR_FILE" \
     < "$STDIN_SOURCE" \
-    >/dev/null 2>/dev/null
+    >/dev/null 2>/dev/null &
 
+PIN_PID=$!
+MAX_SIZE_BYTES=$((MAX_SIZE_MB * 1024 * 1024))
+SIZE_KILLED=0
+
+# Watch the output file size on every 10 secs while PIN is still working
+while kill -0 "$PIN_PID" 2>/dev/null; do
+    sleep 10
+    if [ -f "$OUTPUT_FILE" ]; then
+        CURRENT_SIZE=$(stat -c%s "$OUTPUT_FILE" 2>/dev/null || echo 0)
+        if [ "$CURRENT_SIZE" -gt "$MAX_SIZE_BYTES" ]; then
+            echo "[run_trace] Output exceeded ${MAX_SIZE_MB} MB - stopping trace early!"
+            kill "$PIN_PID" 2>/dev/null
+            SIZE_KILLED=1
+            break
+        fi
+    fi
+done
+
+# Wait until PIN fully exits and capture the exit code
+wait "$PIN_PID" 2>/dev/null
 EXIT_CODE=$?
-
 
 # Cleanup the processes
 kill "$XVFB_PID" 2>/dev/null
@@ -101,8 +123,10 @@ wait "$XVFB_PID" 2>/dev/null
 # Exit types
 # Code 124 - timeout (normally and intentionally keep the program run until timeout)
 # Code 0 - program finished naturally before timeout
-# Any other code - error or program specific exits
-if [ "$EXIT_CODE" -eq 124 ]; then
+# Any other code - error or program specific exits which includes process killed for file size
+if [ "$SIZE_KILLED" -eq 1 ]; then
+    echo "[run_trace] Trace stopped early due to file size limit - keeping captured data"
+elif [ "$EXIT_CODE" -eq 124 ]; then
     echo "[run_trace] Timeout reached - trace captured up to max opcodes"
 elif [ "$EXIT_CODE" -eq 0 ]; then
     echo "[run_trace] Program finished naturally"
