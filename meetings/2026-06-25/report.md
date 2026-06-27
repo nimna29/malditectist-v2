@@ -1,4 +1,4 @@
-# Report for period 2026-06-25 to 2026-07-01
+# Report for period 2026-06-25 to 2026-06-30
 
 **Goals from last meeting:**
 
@@ -26,5 +26,13 @@
 ---
 
 Items discussed with supervisor: (After the meeting)
-
--
+- Remove limits and try to extract most of the opcodes from each jar file.
+- Take a look at how I can get opcodes with also operands - no need for right now
+- This is a platform-specific setup because this setup will only work with the intel systems
+- Markov ML models for opcodes - check that for another alternative approach for N-grams
+- Just take a look at how the jar programs are working based on the opcodes (could be based on the opcode frequency)
+    - Like the phases of the application process
+    - Like a timeline
+    - For example: startup phase, I/O phase, more processing, accessing something, quitting the program
+- Talk about the methodology section - The end goal of the dissertation is to tell the story about how this methodology will help to analyse programs
+- This could successfully identify types of programs, it phases, and detect anomalies in those programs, or this could be a total failed approach to do so
