@@ -8,3 +8,4 @@ src/sandbox/__pycache__
 src/sandbox/data
 src/sandbox/selected-latest
 src/sandbox/tracer_progress.json
+.vscode
