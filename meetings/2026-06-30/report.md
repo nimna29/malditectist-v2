@@ -29,4 +29,8 @@
 
 Items discussed with supervisor: (After the meeting)
 
--
+- Do experiments in every possible way, even if it takes more time and resources to process, just need to look at what I can do with this data, and make a comparison with the results.
+    - Like raw opcode traces vs numpy encoded traces
+- Try any possible way to do the preprocessing and feature engineering, see the benefits and limitations, and determine whether it is worth doing it.
+- And also note down everything you do.
+- Next meeting 15th of July
