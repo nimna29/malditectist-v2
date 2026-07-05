@@ -301,8 +301,8 @@ def encode_trace_to_npy(trace_path: str, vocab_to_id: dict, output_npy_path: str
                 if op:
                     yield vocab_to_id.get(op, -1)
     
-    # Convert the generator to a numpy array of int16 and save it to the output npy file
-    array = np.fromiter(encoded_ids(), dtype=np.int16)
+    # Convert the generator to a numpy array of int32 and save it to the output npy file
+    array = np.fromiter(encoded_ids(), dtype=np.int32)
     os.makedirs(os.path.dirname(output_npy_path) or ".", exist_ok=True)
     np.save(output_npy_path, array)
     
@@ -331,5 +331,124 @@ def decode_trace_npy(npy_path: str, vocab: list) -> list:
     array = np.load(npy_path)
     decoded_trace = [vocab[i] if i >= 0 else "<UNK>" for i in array]
     return decoded_trace
+
+
+# Functions for EDA and Feature Engineering
+
+# This is a constant set as a safe limit for the maximum vocabulary size.
+# It is intentionally large enough to support int32-encoded opcode ids.
+MAX_SAFE_VOCAB_SIZE = np.iinfo(np.int32).max
+
+def check_vocab_size(vocab: list) -> None:
+    if len(vocab) > MAX_SAFE_VOCAB_SIZE:
+        raise ValueError(
+            f"Vocabulary has {len(vocab)} entries "
+            f"Exceeding the int32 safe limit ({MAX_SAFE_VOCAB_SIZE})"
+        )
+
+# Small callable function to load the encoded trace    
+def load_encoded_trace(npy_path: str, mmap: bool = True) -> np.ndarray:
+    # Load the encoded trace from the npy file with optional memory mapping
+    # Memory mapping useful for access large files without loading the entire file into memory
+    return np.load(npy_path, mmap_mode = "r" if mmap else None)
+
+# Function to calculate the frequency of each opcode id in the encoded trace array
+def opcode_frequency(array: np.ndarray, vocab_size: int) -> np.ndarray:
+    
+    valid_array = array[array >= 0] # Ignore invalid opcode ids (negative values)
+    # Use numpy bincount to count the occurrence of each opcode id in the valid array
+    freq = np.bincount(valid_array, minlength = vocab_size).astype(np.int64)
+    
+    return freq
+
+# Function to calculate the entropy of the opcode frequency distribution
+def opcode_entropy(freq: np.ndarray) -> float:
+    total = freq.sum()
+    
+    # If the total frequency is zero return entropy as 0.0 to avoid division by zero
+    if total == 0:
+        return 0.0
+    
+    # Calculate the probability of each opcode id by dividing the frequency by the total
+    probs = freq[freq > 0] / total
+    
+    # Calculate the entropy using the following formula for all probs
+    return float(-(probs * np.log2(probs)).sum())
+
+# Function to calculate the n-gram counts of opcode ids in the encoded trace array
+def ngram_counts(array: np.ndarray, vocab_size: int, n: int = 2) -> np.ndarray:
+    
+    valid_array = array[array >= 0].astype(np.int64)
+    
+    # If the length of the valid array is less than n
+    # Return an array of zeros with size vocab_size ** n
+    if len(valid_array) < n:
+        return np.zeros(vocab_size ** n, dtype = np.int64)
+    
+    # Calculate the ngram ids by slide a window of size n over the valid array
+    ids = np.zeros(len(valid_array) - n + 1, dtype = np.int64)
+    
+    # Loop the offsets from 0 to n-1 and calculate the ngram ids 
+    # Multiplying the opcode ids by vocab_size to the power of (n - 1 - offset)
+    # This is perform to create a unique id for each ngram combination of opcode ids
+    for offset in range(n):
+        ids += valid_array[
+            offset: len(valid_array) - n + 1 + offset] * (vocab_size ** (n - 1 - offset))
+    
+    ngram_freq = np.bincount(ids, minlength = vocab_size ** n)
+    
+    return ngram_freq
+
+# Function to calculate the Markov transition matrix from the encoded trace array
+def markov_transition_matrix(array: np.ndarray, vocab_size: int) -> np.ndarray:
+    
+    # Calculate the bigram counts of opcode ids in the encoded trace array
+    bigrams = ngram_counts(array, vocab_size, n=2).reshape(
+                vocab_size, vocab_size).astype(np.float64)
+    
+    # Calculate the row sums of the bigram counts to normalize the transition probs
+    row_sums = bigrams.sum(axis=1, keepdims = True)
+    
+    # Use errstate to ignore invalid / divide by zero warnings during the transition matrix calc
+    with np.errstate(invalid = "ignore", divide = "ignore"):
+        transition = np.where(row_sums > 0, bigrams / row_sums, 0.0)
+        
+    return transition
+
+# Function to calculate the sliding window features from the encoded trace array
+def sliding_window_features(array: np.ndarray, vocab_size: int, window_size: int,
+                            step: Optional[int] = None) -> np.ndarray:
+    
+    # If step is not provided set it to the window_size to create nonoverlapping windows
+    step = step or window_size
+    n = len(array)
+    
+    # If the length of the array is zero return a empty array with shape (0, vocab_size)
+    if n == 0:
+        return np.zeros((0, vocab_size), dtype = np.float64)
+    
+    # Calculate the starting indices of the sliding windows based on above step size
+    starts = range(0, n, step)
+    rows = []
+    
+    # Loop the starting indices and extract the sliding windows from the array
+    for start in starts:
+        window = array[start: start + window_size]
+        
+        if len(window) == 0:
+            continue
+        
+        # Calculate the frequency of each opcode id in the sliding window
+        freq = opcode_frequency(window, vocab_size).astype(np.float64)
+        total = freq.sum()
+        
+        # Normalize the frequency by dividing the total to get the related frequency
+        rows.append(freq / total if total > 0 else freq)
+    
+    # Stack the normalized row frequencies into a 2D numpy array
+    features = np.stack(rows) if rows else np.zeros((0, vocab_size), dtype = np.float64)
+    
+    return features
+    
 
 
