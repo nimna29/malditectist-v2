@@ -291,21 +291,31 @@ def build_opcode_vocab(trace_paths: Iterator[str]) -> list:
     return sorted(vocab_set)
 
 # Function to encode the trace file to a numpy array of opcode ids
-def encode_trace_to_npy(trace_path: str, vocab_to_id: dict, output_npy_path: str) -> int:
-    
+def encode_trace_to_npy(trace_path: str, vocab_to_id: dict, output_npy_path: str,
+                        valid_opcodes: set = None) -> int:
+
+    # Select the smallest safe dtype based on the vocab size
+    # int16 supports up to 32767 ids, int32 up to around 2.1 billion
+    dtype = np.int16 if len(vocab_to_id) <= np.iinfo(np.int16).max else np.int32
+
     # Define a generator function to yield the encoded opcode ids from the trace file
+    # If valid_opcodes is given, any opcode not in it then it is skipped entirely
+    # This filters the corrupted strings during encoding without touching the raw file
     def encoded_ids():
         with open(trace_path, "r", encoding="utf-8", errors="ignore") as f:
             for line in f:
                 op = line.rstrip("\n")
-                if op:
-                    yield vocab_to_id.get(op, -1)
-    
-    # Convert the generator to a numpy array of int32 and save it to the output npy file
-    array = np.fromiter(encoded_ids(), dtype=np.int32)
+                if not op:
+                    continue
+                if valid_opcodes is not None and op not in valid_opcodes:
+                    continue
+                yield vocab_to_id.get(op, -1)
+
+    # Convert the generator to a numpy array and save it to the output npy file
+    array = np.fromiter(encoded_ids(), dtype=dtype)
     os.makedirs(os.path.dirname(output_npy_path) or ".", exist_ok=True)
     np.save(output_npy_path, array)
-    
+
     return len(array)
 
 
