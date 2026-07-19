@@ -80,6 +80,27 @@ fi
 
 # -XX:+TieredCompilation - enable to produce more native instruction to the trace
 
+# E1/E3 - Default environment with JIT compilation enabled
+
+# timeout "$TIMEOUT_SEC" "$PIN" \
+#     -injection child \
+#     -t "$PINTOOL" \
+#     -o "$OUTPUT_FILE" \
+#     -max "$MAX_OPCODES" \
+#     -- \
+#     java \
+#     -XX:CompileThreshold=100 \
+#     -XX:+TieredCompilation \
+#     -jar "$JAR_FILE" \
+#     < "$STDIN_SOURCE" \
+#     >/dev/null 2>/dev/null &
+
+
+# -Xint - force pure interpreter mode which disable JIT compilation for E2/E4
+# The JVM interpreter is itself native x86 so the trace still contains opcodes
+# But these are the interpreter dispatch loop rather than JIT compiled program logic
+# E2/E4 - Environment with JIT compilation disabled
+
 timeout "$TIMEOUT_SEC" "$PIN" \
     -injection child \
     -t "$PINTOOL" \
@@ -87,11 +108,11 @@ timeout "$TIMEOUT_SEC" "$PIN" \
     -max "$MAX_OPCODES" \
     -- \
     java \
-    -XX:CompileThreshold=100 \
-    -XX:+TieredCompilation \
+    -Xint \
     -jar "$JAR_FILE" \
     < "$STDIN_SOURCE" \
     >/dev/null 2>/dev/null &
+
 
 PIN_PID=$!
 MAX_SIZE_BYTES=$((MAX_SIZE_MB * 1024 * 1024))

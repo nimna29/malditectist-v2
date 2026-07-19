@@ -20,9 +20,9 @@ log = get_logger("tracer")
 
 # I/O paths and files configs
 INPUT_DIR = os.path.join("selected-latest")
-OUTPUT_DIR = os.path.join("data", "raw_traces")
+OUTPUT_DIR = os.path.join("data-e2", "raw_traces")
 DOCKER_IMAGE = "malditectist-tracer"
-PROGRESS_FILE = os.path.join("tracer_progress.json")
+PROGRESS_FILE = os.path.join("tracer_progress_e2.json")
 
 # PIN trace related settings
 MAX_OPCODES = 0 # 0 = unlimited opcodes
@@ -190,7 +190,8 @@ def run_process():
 
     # Startup banner
     log.info("#" * 50)
-    log.info("MalDitectist V2 - Opcode Tracer")
+    # log.info("MalDitectist V2 - Opcode Tracer")
+    log.info("MalDitectist V2 - Opcode Tracer - Mode E2/E4 with No JIT clean Opcode Tracing")
     log.info(f"Input: {INPUT_DIR}/")
     log.info(f"Output: {OUTPUT_DIR}/")
     log.info(f"Total Files: {len(all_jars)}")

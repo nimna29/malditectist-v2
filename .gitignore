@@ -5,8 +5,10 @@ src/data_collection/test.py
 src/data_collection/JavaFiles
 src/data_collection/progress.json
 src/sandbox/__pycache__
-src/sandbox/data
+src/sandbox/data/raw_traces_test_260_data
+src/sandbox/data/features/sliding_windows
 src/sandbox/selected-latest
 src/sandbox/tracer_progress.json
 .vscode
 src/data_analysis/__pycache__
+src/sandbox/data-e2
