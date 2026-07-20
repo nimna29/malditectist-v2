@@ -11,4 +11,9 @@ src/sandbox/selected-latest
 src/sandbox/tracer_progress.json
 .vscode
 src/data_analysis/__pycache__
-src/sandbox/data-e2
+
+src/sandbox/data-e2/encoded_traces
+src/sandbox/data-e2/raw_traces
+src/data_analysis_e2/__pycache__
+src/sandbox/data-e2/raw_traces_test_260_data
+src/sandbox/data-e2/features/sliding_windows
