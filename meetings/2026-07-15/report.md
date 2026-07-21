@@ -43,4 +43,11 @@
 
 Items discussed with supervisor: (After the meeting)
 
--
+- Now my controlled setup is using the JIT compiled traces, and this setup is good, and it is the fixed path for this research project.
+- I will be using the same 260 files, Python scripts, and notebooks.
+- Then we will change only the following controlled environment parameters to generate new data and compare the new data with the original results.
+    - Turning off the JIT compilation and taking raw opcode traces from all 260 files
+    - Use obfuscation tool to obfuscate the all 260 files and trace it with the JIT compilation
+    - Use the same obfuscated files without the JIT compilation
+- We are doing this because without actual malware files I can't say that what is exactly anomaly look like.
+- From this setup, I can compare and discuss how this model will perform as the environment variables change. Is it a generalized model or not? How to perform and what results it shows with the 4 different setups.
