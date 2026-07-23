@@ -19,10 +19,11 @@ from data_collection.logger import get_logger
 log = get_logger("tracer")
 
 # I/O paths and files configs
-INPUT_DIR = os.path.join("selected-latest")
-OUTPUT_DIR = os.path.join("data-e2", "raw_traces")
+INPUT_DIR = os.path.join("selected-obfuscated")
+OUTPUT_DIR = os.path.join("data-e4", "raw_traces")
 DOCKER_IMAGE = "malditectist-tracer"
-PROGRESS_FILE = os.path.join("tracer_progress_e2.json")
+PROGRESS_FILE = os.path.join("tracer_progress_e4.json")
+KEEP_LIST_FILE = os.path.join("keep_list.csv")
 
 # PIN trace related settings
 MAX_OPCODES = 0 # 0 = unlimited opcodes
@@ -55,6 +56,32 @@ def load_progress() -> dict:
 def save_progress(traced: list, failed: list):
     with open(PROGRESS_FILE, "w") as f:
         json.dump({"traced": traced, "failed": failed}, f, indent=2)
+
+# Function to load the keep list filenames
+# Reads the keep_list.csv and returns a set of jar filenames to trace
+def load_keep_list() -> set:
+    keep = set()
+    with open(KEEP_LIST_FILE, "r") as f:
+        # Read the header row and find the filename column
+        header = f.readline().strip().split(",")
+        
+        try:
+            name_col = header.index("filename")
+            
+        except ValueError:
+            name_col = 0  # Fallback to the first column if no header match
+
+        for line in f:
+            if not line.strip():
+                continue
+            name = line.strip().split(",")[name_col].strip()
+            
+            # Normalise to a .jar filename so it matches the input folder
+            if not name.endswith(".jar"):
+                name = name + ".jar"
+            keep.add(name)
+
+    return keep
 
 # Function to check the docker image
 def check_docker_image() -> bool:
@@ -176,7 +203,22 @@ def run_process():
     if not all_jars:
         log.info("No jar files found in the selected-latest (Nothing to trace)")
         return
-    
+
+    # Filter down to only the keep list files
+    if not os.path.exists(KEEP_LIST_FILE):
+        log.error(f"Keep List file not found: {KEEP_LIST_FILE}")
+        log.error("Run the build_keep_list.py to generate the keep_list.csv")
+        return
+
+    keep_set = load_keep_list()
+    all_jars = [f for f in all_jars if f in keep_set]
+
+    if not all_jars:
+        log.info("No jar files matched the keep list")
+        return
+
+    log.info(f"Keep List Applied: {len(all_jars)}/{len(keep_set)} keep list files present in input")
+
     # Load the previous progress
     progress = load_progress()
     traced = progress["traced"]
@@ -191,7 +233,7 @@ def run_process():
     # Startup banner
     log.info("#" * 50)
     # log.info("MalDitectist V2 - Opcode Tracer")
-    log.info("MalDitectist V2 - Opcode Tracer - Mode E2/E4 with No JIT clean Opcode Tracing")
+    log.info("MalDitectist V2 - Opcode Tracer - Mode E4 with no JIT Opcode Tracing")
     log.info(f"Input: {INPUT_DIR}/")
     log.info(f"Output: {OUTPUT_DIR}/")
     log.info(f"Total Files: {len(all_jars)}")

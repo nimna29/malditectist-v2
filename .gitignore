@@ -17,3 +17,16 @@ src/sandbox/data-e2/raw_traces
 src/data_analysis_e2/__pycache__
 src/sandbox/data-e2/raw_traces_test_260_data
 src/sandbox/data-e2/features/sliding_windows
+src/sandbox/proguard-7.6.1
+src/sandbox/data-E1-Done.7z
+src/sandbox/data-E2-Done.7z
+src/sandbox/selected-obfuscated
+src/sandbox/proguard_mappings
+
+src/sandbox/data-e3/encoded_traces
+src/sandbox/data-e3/raw_traces
+src/sandbox/data-E3-Done.7z
+
+src/sandbox/data-e4/encoded_traces
+src/sandbox/data-e4/raw_traces
+src/sandbox/data-E4-Done.7z
