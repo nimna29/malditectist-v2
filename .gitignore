@@ -30,3 +30,9 @@ src/sandbox/data-E3-Done.7z
 src/sandbox/data-e4/encoded_traces
 src/sandbox/data-e4/raw_traces
 src/sandbox/data-E4-Done.7z
+
+src/data_analysis_e3/__pycache__
+src/data_analysis_e4/__pycache__
+
+src/sandbox/data-e3/features/sliding_windows
+src/sandbox/data-e4/features/sliding_windows
