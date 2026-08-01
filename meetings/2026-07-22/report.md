@@ -45,4 +45,5 @@
 
 Items discussed with supervisor: (After the meeting)
 
--
+- Go with this plan, and once finished, start writing the document
+- First, do the background sections and the literature review section, then send them to the supervisor for review and feedback. I can start with the Methodology section as well.
