@@ -1,0 +1,78 @@
+filename,kind,exit_code,first_line
+ant-1.6.5.jar,missing_dependency,1,Error: Could not find or load main class org.apache.tools.ant.Main
+aptconvert-020903-patch.jar,other,1,Usage: java fr.pixware.apt.convert.Driver ?options?
+asm-xml-20041228.180559.jar,missing_dependency,1,Error: Unable to initialize main class org.objectweb.asm.xml.Processor
+avalon-phoenix-loader-4.0.4.jar,other,1,java.lang.Exception: Unable to locate phoenix-loader.jar in classpath
+batik-rasterizer-1.6-1.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.batik.apps.rasterizer.Main
+batik-slideshow-1.6-1.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.batik.apps.slideshow.Main
+batik-squiggle-1.6-1.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.batik.apps.svgbrowser.Main
+batik-svgpp-1.6-1.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.batik.apps.svgpp.Main
+batik-ttf2svg-1.6-1.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: org/apache/batik/svggen/font/SVGFont"
+bgp-bmp-mock-2.0.0.jar,other,1,Error: LinkageError occurred while loading main class org.opendaylight.protocol.bmp.mock.BmpMock
+bgp-testtool-2.0.0.jar,other,1,Error: LinkageError occurred while loading main class org.opendaylight.protocol.bgp.testtool.Main
+checkstyle-5.0.jar,missing_dependency,1,Error: Unable to initialize main class com.puppycrawl.tools.checkstyle.Main
+cocoon-2.1.11.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: org/apache/commons/cli/Options"
+costello-1.4.0.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: abbot/Platform"
+cvslib-3.6.jar,other,1,"No CVS root is set. Use the cvs.root property, e.g. java -Dcvs.root="":pserver:user@host:/usr/cvs"" or start the application in a directory containing a CVS subdirectory or use the -d command switch."
+deder-publish-example_3-0.0.1.jar,missing_dependency,1,Error: Unable to initialize main class ba.sake.deder.examples.sharaf.serverMain
+did-method-prism_3-0.1.0-M36.jar,missing_dependency,1,Error: Unable to initialize main class fmgp.did.method.prism.vdr.Indexer
+dnsjava-3.6.5.jar,other,1,Usage: <command> <options>
+etomcat-3.3.2.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.tomcat.startup.EmbededTomcat
+exist-resolver-0.9.2.jar,other,1,Usage: resolver [options] keyword
+findbugs-1.0.0.jar,missing_dependency,1,Error: Could not find or load main class edu.umd.cs.findbugs.FindBugs
+findbugsGUI-1.0.0.jar,missing_dependency,1,Error: Unable to initialize main class edu.umd.cs.findbugs.gui.FindBugsFrame
+geronimo-upgrade-1.1.1.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.geronimo.upgrade.UpgradeGBean
+google-cloud-spanner-cassandra-1.2.0.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: org/slf4j/LoggerFactory"
+grammar-1.0.0-M01.jar,runtime_exception,1,"Exception in thread ""main"" java.lang.ExceptionInInitializerError"
+grammar-M01.jar,runtime_exception,1,"Exception in thread ""main"" java.lang.ExceptionInInitializerError"
+grizzly-cachetest-1.9.36.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: com/sun/grizzly/util/DataStructures"
+hepek-cli_3-0.34.0.jar,missing_dependency,1,Error: Unable to initialize main class ba.sake.hepek.cli.HepekCliApp
+izpack-standalone-compiler-3.7.2.jar,other,1,.::  IzPack - Version 3.7.2 (build 2005.04.22) ::.
+jardiff-0.2.jar,missing_dependency,1,Error: Unable to initialize main class org.osjava.jardiff.Main
+jasper-3.3.2.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.jasper.JspC
+javancss-30.51.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: ccl/util/Exitable"
+javatar-2.5.jar,missing_dependency,1,Error: Unable to initialize main class com.ice.tar.tar
+jcvsii-5.3.2.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: javax/activation/CommandMap"
+jetty-5.1.10.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory"
+jgrapht-0.6.0.jar,missing_dependency,1,Error: Unable to initialize main class org._3pq.jgrapht.demo.JGraphAdapterDemo
+jkconfig-5.0.28.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory"
+jmdns-1.0.jar,ran_until_timeout,timeout,
+jpox-enhancer-1.2.0-beta-5.jar,missing_dependency,1,Error: Could not find or load main class org.jpox.enhancer.JPOXEnhancer
+jxl-2.4.2.jar,other,1,Command format:  Demo [-unicode] [-csv] [-hide] excelfile
+jxta-2.0.jar,missing_dependency,1,Jxta is now taking off. Please fasten your seat belts and extinguish all smoking materials.
+loom-launcher-1.0-rc3.jar,other,1,java.lang.Exception: Unable to locate loom-launcher.jar in classpath. User must specify loom.home system property.
+mckoi-1.0.2.jar,other,1,Mckoi SQL Database ( 1.0.2 )
+mlapi_2.12-0.0.1.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: scala/collection/Seq"
+molindo-webtools-crawler-1.0.0.jar,runtime_exception,1,starting crawler
+molindo-webtools-loganalyzer-1.0.0.jar,runtime_exception,1,"Exception in thread ""main"" java.lang.IllegalArgumentException: file missing"
+msv-20050913.jar,missing_dependency,1,Error: Unable to initialize main class com.sun.msv.driver.textui.Driver
+nanocontainer-20051006.102624.jar,missing_dependency,1,Error: Unable to initialize main class org.nanocontainer.Standalone
+nanocontainer-booter-1.0.jar,runtime_exception,1,"Exception in thread ""main"" java.lang.NullPointerException: Cannot read the array length because ""libs"" is null"
+numsca_2.12-0.1.5.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: scala/collection/Seq"
+numsca_2.13-0.1.7.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: scala/collection/immutable/Seq"
+org.mortbay.jetty-jdk1.2-5.1.10.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory"
+org.mortbay.jmx-4.2.25.jar,other,1,Usage - java org.mortbay.util.jmx.Main <mletURL>...
+org.mortbay.jmx-jdk1.2-5.0.RC0.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory"
+pekko-persistence-r2dbc-migration_2.13-2.0.0-M1.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.pekko.persistence.r2dbc.migration.MigrationTool
+pekko-persistence-r2dbc-migration_3-2.0.0-M1.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.pekko.persistence.r2dbc.migration.MigrationTool
+rts-gen_2.11-0.1.13.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: scala/Function1"
+rts-gen_2.12-0.1.13.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: scala/io/Source$"
+skeptik_2.10-1.0.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: scala/collection/Seq"
+skeptik_2.9.1-0.1.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: scala/ScalaObject"
+standalone-compiler-3.8.0.jar,other,1,.::  IzPack - Version 3.8.0 ::.
+surefire-grouper-3.5.6.jar,runtime_exception,1,"Enter expression: Exception in thread ""main"" java.lang.NullPointerException: Cannot invoke ""String.length()"" because ""s"" is null"
+sysson_2.10-1.12.0.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: de/sciss/mellite/Application"
+sysson_2.11-1.17.0.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: de/sciss/mellite/Application"
+sysson_2.12-1.17.0.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: de/sciss/mellite/Application"
+tomcat-3.3.2.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory"
+tsimulus_2.11-0.1.18.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: scala/Function1"
+tsimulus_2.12-0.1.18.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: scala/io/Source$"
+tupson-js_sjs1_3-v0.1.1-DIRTYfb94c54e.jar,missing_dependency,1,Error: Unable to initialize main class ba.sake.bla
+tupson-js_sjs1_3-v0.1.2-DIRTYfb94c54e.jar,missing_dependency,1,Error: Unable to initialize main class ba.sake.bla
+tupson-jvm_3-v0.1.1-DIRTYfb94c54e.jar,missing_dependency,1,Error: Unable to initialize main class ba.sake.bla
+tupson-jvm_3-v0.1.2-DIRTYfb94c54e.jar,missing_dependency,1,Error: Unable to initialize main class ba.sake.bla
+velocity-dvsl-0.43.jar,missing_dependency,1,Error: Unable to initialize main class org.apache.tools.dvsl.DVSL
+webmacro-1.1final.jar,missing_dependency,1,Error: Unable to initialize main class org.webmacro.WM
+xercesjarv-20020712-DG.jar,missing_dependency,1,"Exception in thread ""main"" java.lang.NoClassDefFoundError: org/iso_relax/verifier/VerifierFactory"
+xml-resolver-1.2.jar,other,1,Usage: resolver [options] keyword
+ymsg-test-0.6.jar,missing_dependency,1,Error: Unable to initialize main class ymsg.test.SwingTestClient
