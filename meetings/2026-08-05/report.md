@@ -58,4 +58,8 @@ Elliptic Envelope     0.890 ± 0.073  0.930 ± 0.060  0.910 ± 0.037  0.880 ± 0
 
 Items discussed with supervisor: (After the meeting)
 
--
+- Monday and Wednesday - Send email
+- Thursday at 1 PM
+- Check assignment brief
+- Presentation preparation
+- Future plans: think about it - have a plan to develop a fully working application for this like a user can upload a file, then check whether it is malware or not before it's run. Also maybe later on a desktop application as well.
