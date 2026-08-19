@@ -25,4 +25,5 @@
 
 Items discussed with supervisor: (After the meeting)
 
--
+- Search for the Data Form template on MLS
+- Agree to complete the draft on the 16th and get feedback.
